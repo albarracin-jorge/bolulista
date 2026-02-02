@@ -3,6 +3,15 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Custom color palette */
+  --color-error: oklch(39.6% 0.141 25.723);
+  --color-bg-primary: oklch(14.1% 0.005 285.823);
+  --color-bg-secondary: oklch(21% 0.006 285.885);
+  --color-bg-tertiary: oklch(27.4% 0.006 286.033);
+  --color-text: oklch(98.5% 0.002 247.839);
+  --color-text-contrast: oklch(21% 0.006 285.885);
+  --color-success: oklch(39.3% 0.095 152.535);
 }
 
 @theme inline {
@@ -10,12 +19,21 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  
+  /* Define custom colors */
+  --color-error: var(--color-error);
+  --color-bg-primary: var(--color-bg-primary);
+  --color-bg-secondary: var(--color-bg-secondary);
+  --color-bg-tertiary: var(--color-bg-tertiary);
+  --color-text: var(--color-text);
+  --color-text-contrast: var(--color-text-contrast);
+  --color-success: var(--color-success);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: oklch(14.1% 0.005 285.823);
+    --foreground: oklch(98.5% 0.002 247.839);
   }
 }
 
