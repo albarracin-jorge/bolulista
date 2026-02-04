@@ -1,10 +1,24 @@
 import AddItemForm from '@/components/add-item-form';
+import AuthForm from '@/components/auth-form';
 import ItemList from '@/components/item-list';
+import { logoutUser } from '@/app/actions/auth';
 import { prisma } from '@/lib/prisma';
+import { getSession } from '@/lib/session';
 
 export default async function Home() {
-  const [items, categories] = await Promise.all([
+  const session = await getSession();
+
+  if (!session) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-50 px-4 py-8 font-sans dark:bg-bg-primary">
+        <AuthForm />
+      </div>
+    );
+  }
+
+  const [items, categories, user] = await Promise.all([
     prisma.item.findMany({
+      where: { userId: session.userId },
       include: {
         category: true,
       },
@@ -13,9 +27,14 @@ export default async function Home() {
       },
     }),
     prisma.category.findMany({
+      where: { userId: session.userId },
       orderBy: {
         title: 'asc',
       },
+    }),
+    prisma.user.findUnique({
+      where: { id: session.userId },
+      select: { email: true },
     }),
   ]);
 
@@ -26,9 +45,17 @@ export default async function Home() {
           <h1 className="text-4xl font-bold text-zinc-900 dark:text-text">
             BoluLista
           </h1>
-          <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-            Organiza tus compras por categorías
-          </p>
+          <div className="mt-4 flex flex-col items-center gap-2 text-sm text-zinc-500 dark:text-zinc-400">
+            <span>{user?.email}</span>
+            <form action={logoutUser}>
+              <button
+                type="submit"
+                className="rounded-md bg-bg-tertiary px-3 py-1.5 text-text hover:bg-bg-tertiary/80"
+              >
+                Cerrar sesión
+              </button>
+            </form>
+          </div>
         </header>
 
         <div className="flex flex-col items-center gap-8">
