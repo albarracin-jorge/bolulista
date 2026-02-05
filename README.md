@@ -1,6 +1,6 @@
 # BoluLista
 
-BoluLista is a minimal shopping list app built with Next.js (App Router), Prisma, and MongoDB. It supports categories, inline editing, and a simple email/password authentication flow with server-side sessions.
+BoluLista is a minimal shopping list app built with Next.js (App Router), Prisma, and MongoDB. It supports categories, inline editing, and a simple email/password authentication flow with server-side sessions. 
 
 ## Features
 
