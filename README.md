@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BoluLista
+
+BoluLista is a minimal shopping list app built with Next.js (App Router), Prisma, and MongoDB. It supports categories, inline editing, and a simple email/password authentication flow with server-side sessions.
+
+## Features
+
+- Create, edit, and delete items.
+- Organize items by categories.
+- Simple authentication (email + password).
+- Session-based access (items and categories are scoped per user).
+- Healthcheck endpoint that validates the database connection.
+
+## Tech Stack
+
+- Next.js 16 (App Router)
+- Prisma 6 + MongoDB
+- Tailwind CSS v4
+- Zod validation
+
+## Requirements
+
+- Node.js 20+
+- MongoDB connection string
+
+## Environment Variables
+
+Create a `.env` file with:
+
+```bash
+DATABASE_URL="mongodb://..."
+SESSION_SECRET="your-strong-secret"
+```
+
+Optional (only if using Prisma Accelerate):
+
+```bash
+ACCELERATE_URL="your-accelerate-url"
+```
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Generate Prisma Client (required for local dev builds):
+
+```bash
+npx prisma generate
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Healthcheck
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The healthcheck endpoint verifies database connectivity:
 
-## Learn More
+```
+GET /healthcheck
+```
 
-To learn more about Next.js, take a look at the following resources:
+It returns:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```json
+{ "status": "ok", "db": "connected" }
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Or on failure:
 
-## Deploy on Vercel
+```json
+{ "status": "error", "db": "disconnected", "message": "..." }
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Notes for Deployment (Nixpacks)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If you deploy with Nixpacks, make sure `prisma generate` runs during build. A common approach is adding a `postinstall` script:
+
+```json
+"postinstall": "prisma generate"
+```
+
+Also ensure `DATABASE_URL` is available at build time so Prisma Client can be generated.
