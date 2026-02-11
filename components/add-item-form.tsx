@@ -118,6 +118,40 @@ export default function AddItemForm({ categories }: AddItemFormProps) {
         </div>
 
         <div>
+          <label
+            htmlFor="link"
+            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-text"
+          >
+            Link del producto
+          </label>
+          <input
+            type="url"
+            id="link"
+            name="link"
+            disabled={isPending}
+            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-success focus:outline-none focus:ring-1 focus:ring-success disabled:opacity-50 dark:border-bg-tertiary dark:bg-bg-tertiary dark:text-text dark:placeholder-zinc-500"
+            placeholder="https://ejemplo.com/producto"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="imageUrl"
+            className="mb-1 block text-sm font-medium text-zinc-700 dark:text-text"
+          >
+            URL de la imagen
+          </label>
+          <input
+            type="url"
+            id="imageUrl"
+            name="imageUrl"
+            disabled={isPending}
+            className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 placeholder-zinc-400 focus:border-success focus:outline-none focus:ring-1 focus:ring-success disabled:opacity-50 dark:border-bg-tertiary dark:bg-bg-tertiary dark:text-text dark:placeholder-zinc-500"
+            placeholder="https://ejemplo.com/imagen.jpg"
+          />
+        </div>
+
+        <div>
           <div className="mb-1 flex items-center justify-between">
             <label
               htmlFor="categoryId"

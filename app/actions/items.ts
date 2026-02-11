@@ -8,6 +8,8 @@ import { requireUserId } from '@/lib/session';
 const itemSchema = z.object({
   name: z.string().min(1, 'El nombre es requerido'),
   description: z.string().optional(),
+  link: z.string().url('El enlace debe ser una URL válida').optional().or(z.literal('')),
+  imageUrl: z.string().url('La URL de la imagen debe ser válida').optional().or(z.literal('')),
   categoryId: z.string().min(1, 'La categoría es requerida'),
 });
 
@@ -110,6 +112,8 @@ export async function updateItem(id: string, formData: FormData) {
     const rawData = {
       name: formData.get('name'),
       description: formData.get('description') || undefined,
+      link: formData.get('link') || undefined,
+      imageUrl: formData.get('imageUrl') || undefined,
       categoryId: formData.get('categoryId'),
     };
 

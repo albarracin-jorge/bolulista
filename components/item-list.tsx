@@ -12,6 +12,8 @@ interface Item {
   id: string;
   name: string;
   description: string | null;
+  link: string | null;
+  imageUrl: string | null;
   categoryId: string;
   category: Category;
   createdAt: Date;
@@ -27,6 +29,8 @@ export default function ItemList({ items, categories }: ItemListProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
   const [editDescription, setEditDescription] = useState('');
+  const [editLink, setEditLink] = useState('');
+  const [editImageUrl, setEditImageUrl] = useState('');
   const [editCategoryId, setEditCategoryId] = useState('');
   const [error, setError] = useState<string | null>(null);
 
@@ -34,6 +38,8 @@ export default function ItemList({ items, categories }: ItemListProps) {
     setEditingId(item.id);
     setEditName(item.name);
     setEditDescription(item.description || '');
+    setEditLink(item.link || '');
+    setEditImageUrl(item.imageUrl || '');
     setEditCategoryId(item.categoryId);
     setError(null);
   }
@@ -42,6 +48,8 @@ export default function ItemList({ items, categories }: ItemListProps) {
     setEditingId(null);
     setEditName('');
     setEditDescription('');
+    setEditLink('');
+    setEditImageUrl('');
     setEditCategoryId('');
     setError(null);
   }
@@ -50,6 +58,8 @@ export default function ItemList({ items, categories }: ItemListProps) {
     const formData = new FormData();
     formData.append('name', editName);
     formData.append('description', editDescription);
+    formData.append('link', editLink);
+    formData.append('imageUrl', editImageUrl);
     formData.append('categoryId', editCategoryId);
 
     startTransition(async () => {
@@ -118,6 +128,22 @@ export default function ItemList({ items, categories }: ItemListProps) {
                 className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 focus:border-success focus:outline-none focus:ring-1 focus:ring-success disabled:opacity-50 dark:border-bg-tertiary dark:bg-bg-tertiary dark:text-text"
                 placeholder="Descripción"
               />
+              <input
+                type="url"
+                value={editLink}
+                onChange={(e) => setEditLink(e.target.value)}
+                disabled={isPending}
+                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 focus:border-success focus:outline-none focus:ring-1 focus:ring-success disabled:opacity-50 dark:border-bg-tertiary dark:bg-bg-tertiary dark:text-text"
+                placeholder="Link del producto (ej: https://...)"
+              />
+              <input
+                type="url"
+                value={editImageUrl}
+                onChange={(e) => setEditImageUrl(e.target.value)}
+                disabled={isPending}
+                className="w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-zinc-900 focus:border-success focus:outline-none focus:ring-1 focus:ring-success disabled:opacity-50 dark:border-bg-tertiary dark:bg-bg-tertiary dark:text-text"
+                placeholder="URL de la imagen (ej: https://...)"
+              />
               <select
                 value={editCategoryId}
                 onChange={(e) => setEditCategoryId(e.target.value)}
@@ -149,6 +175,15 @@ export default function ItemList({ items, categories }: ItemListProps) {
             </div>
           ) : (
             <>
+              {item.imageUrl && (
+                <div className="mb-3 overflow-hidden rounded-lg">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.name}
+                    className="h-48 w-full object-cover"
+                  />
+                </div>
+              )}
               <div className="mb-3">
                 <div className="flex items-start justify-between">
                   <h3 className="text-lg font-semibold text-zinc-900 dark:text-text">
@@ -162,6 +197,29 @@ export default function ItemList({ items, categories }: ItemListProps) {
                   <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
                     {item.description}
                   </p>
+                )}
+                {item.link && (
+                  <a
+                    href={item.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-flex items-center gap-1 text-sm text-success hover:underline"
+                  >
+                    <svg
+                      className="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                    Ver producto
+                  </a>
                 )}
                 <p className="mt-2 text-xs text-zinc-400 dark:text-zinc-500">
                   Agregado: {new Date(item.createdAt).toLocaleDateString('es-ES')}
