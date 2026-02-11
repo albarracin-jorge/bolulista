@@ -1,14 +1,15 @@
 # BoluLista
 
-BoluLista is a minimal shopping list app built with Next.js (App Router), Prisma, and MongoDB. It supports categories, inline editing, and a simple email/password authentication flow with server-side sessions. 
+BoluLista is a personal shopping wishlist app built with Next.js (App Router), Prisma, and MongoDB. Keep track of products you want to buy with links, images, descriptions, and custom categories.
 
 ## Features
 
-- Create, edit, and delete items.
-- Organize items by categories.
-- Simple authentication (email + password).
-- Session-based access (items and categories are scoped per user).
-- Healthcheck endpoint that validates the database connection.
+- **Shopping Items Management**: Create, edit, and delete shopping items with name, description, product link, and image URL.
+- **Product Links & Images**: Each item can include a direct link to the product and an image preview.
+- **Custom Categories**: Organize items by categories and create new categories on the fly.
+- **User Authentication**: Simple email/password authentication with secure server-side sessions.
+- **User Privacy**: All items and categories are scoped per user—your lists are private.
+- **Database Healthcheck**: Built-in endpoint to monitor database connectivity.
 
 ## Tech Stack
 
@@ -59,6 +60,32 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
+## Project Structure
+
+```
+app/
+├── actions/
+│   ├── auth.ts          # Authentication server actions (register, login, logout)
+│   └── items.ts         # Item & category CRUD operations
+├── healthcheck/
+│   └── route.ts         # Database health monitoring endpoint
+├── layout.tsx           # Root layout with metadata
+└── page.tsx             # Main page (authentication + shopping list)
+
+components/
+├── auth-form.tsx        # Login/Register form
+├── add-item-form.tsx    # Form to create items and categories
+└── item-list.tsx        # Display and inline editing of items
+
+lib/
+├── prisma.ts            # Prisma client singleton
+├── session.ts           # Session management (HMAC-signed cookies)
+└── password.ts          # Password hashing utilities
+
+prisma/
+└── schema.prisma        # Database schema (User, Item, Category)
+```
+
 ## Healthcheck
 
 The healthcheck endpoint verifies database connectivity:
@@ -67,16 +94,20 @@ The healthcheck endpoint verifies database connectivity:
 GET /healthcheck
 ```
 
-It returns:
+On success (200):
 
 ```json
-{ "status": "ok", "db": "connected" }
+{ "status": "ok" }
 ```
 
-Or on failure:
+On failure (503):
 
 ```json
-{ "status": "error", "db": "disconnected", "message": "..." }
+{
+  "status": "error",
+  "db": "disconnected",
+  "message": "..."
+}
 ```
 
 ## Notes for Deployment (Nixpacks)
