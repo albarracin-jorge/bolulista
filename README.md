@@ -110,6 +110,16 @@ On failure (503):
 }
 ```
 
+## Security
+
+BoluLista implements several security best practices:
+
+- **Password Security**: Passwords are hashed using scrypt (Node.js crypto) with random salts before storage.
+- **Session Security**: Sessions use HMAC-signed cookies with secure, httpOnly, and sameSite flags.
+- **Authorization**: All database queries filter by the authenticated user's ID to prevent unauthorized access.
+- **Input Validation**: All user inputs are validated with Zod schemas before processing.
+- **Session Expiry**: Sessions automatically expire after 7 days.
+
 ## Notes for Deployment (Nixpacks)
 
 If you deploy with Nixpacks, make sure `prisma generate` runs during build. A common approach is adding a `postinstall` script:
